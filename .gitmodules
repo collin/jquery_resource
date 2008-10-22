@@ -1,0 +1,3 @@
+[submodule "jquery_simpletest"]
+	path = jquery_simpletest
+	url = git://github.com/collin/jquery_simpletest.git

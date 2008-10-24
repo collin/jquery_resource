@@ -4,3 +4,6 @@
 [submodule "jquery_template"]
 	path = jquery_template
 	url = git://github.com/collin/jquery_template.git
+[submodule "jquery_object"]
+	path = jquery_object
+	url = git://github.com/collin/jquery_object.git

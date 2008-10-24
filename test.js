@@ -1,19 +1,43 @@
 jQuery(function(_){
-  var loc = window.location;  
-  _.resource('book')
+  Function.prototype.withArgs = function() {
+    var f = this, args = _.makeArray(arguments);
+    return function() {
+      return f.apply(null, args);
+    };
+  };
+  
+  var loc = window.location,
+    url_prefix = loc.protocol+'//'+loc.hostname;
+      
+  _.route('book');
   
   match("/books", _.books_path);
-  match(loc.protocol+'//'+loc.hostname+"/books", _.books_url);
+  match(url_prefix+"/books", _.books_url);
   
-  match("/books/1", function() {
-    return _.book_path(1);
-  });
+  match("/books?&good=true", _.books_path.withArgs({good:true}));
+  match(url_prefix+"/books?&good=true", _.books_url.withArgs({good:true}));
   
-  match("/books/barnaby_jones", function() {
-    return _.book_path('barnaby_jones');
-  });
+  match("/books/1", _.book_path.withArgs(1));
+  match(url_prefix+"/books/1", _.book_url.withArgs(1));
   
-  match("/books/the_theif?&page=33", function() {
-    return _.book_path('the_theif', {page:33});
+  match("/books/barnaby_jones",_.book_path.withArgs('barnaby_jones'));
+  match(url_prefix+"/books/barnaby_jones",_.book_url.withArgs('barnaby_jones'));
+  
+  match("/books/the_theif?&page=33", _.book_path.withArgs('the_theif', {page:33}));
+  match(url_prefix+"/books/the_theif?&page=33", _.book_url.withArgs('the_theif', {page:33}));
+  
+  _.resource('author');
+  assert(_.author_path);
+  assert(_.author_url);
+  
+  _.resource('author')['get'] = function(url, data, callback) {
+    match(url, '/authors');
+    match(data, undefined);
+    this.authors = [this.clone()];
+    callback.apply(this); 
+  };
+  
+  _.resource('author').load(function() {
+    match(1, this.authors.length);
   });
 });

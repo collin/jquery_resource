@@ -2,7 +2,7 @@
   _.route = function(name) {
     var pluralized = Inflector.pluralize(name)
       ,loc = window.location
-      ,url_base = loc.protocol+'//'+loc.hostname;
+      ,url_base = loc.protocol+'//'+loc.hostname+':'+loc.port;
     
     function query_string(options) {
       if(options == undefined) return "";

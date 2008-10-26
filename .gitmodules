@@ -7,3 +7,6 @@
 [submodule "jquery_object"]
 	path = jquery_object
 	url = git://github.com/collin/jquery_object.git
+[submodule "sinatra"]
+	path = sinatra
+	url = git://github.com/bmizerany/sinatra.git

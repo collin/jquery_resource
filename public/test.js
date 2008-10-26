@@ -7,7 +7,7 @@ jQuery(function(_){
   };
   
   var loc = window.location,
-    url_prefix = loc.protocol+'//'+loc.hostname;
+    url_prefix = loc.protocol+'//'+loc.hostname+':'+loc.port;
       
   _.route('book');
   
@@ -27,17 +27,24 @@ jQuery(function(_){
   match(url_prefix+"/books/the_theif?&page=33", _.book_url.withArgs('the_theif', {page:33}));
   
   _.resource('author');
-  assert(_.author_path);
-  assert(_.author_url);
+  exists(_, 'author_path');
+  exists(_, 'author_url');
+  exists(_, 'author');
   
-  _.resource('author')['get'] = function(url, data, callback) {
-    match(url, '/authors');
-    match(data, undefined);
-    this.authors = [this.clone()];
-    callback.apply(this); 
+  
+  var fetched = 0
+    ,limit = 100;
+  
+  _.author.on_get = function(author) {fetched++;};
+  
+  _.author.after_get = function() {
+    match(limit, fetched);
+    _.author.on_get = function() {}
+    _.author.after_get = function() {
+      exists(_.author.id_map, 700);
+    }
+    _.author.get(700);
   };
   
-  _.resource('author').load(function() {
-    match(1, this.authors.length);
-  });
+  _.author.get({limit:limit});
 });

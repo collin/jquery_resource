@@ -1,0 +1,1 @@
+../../jquery.resource.js

@@ -10,3 +10,6 @@
 [submodule "sinatra"]
 	path = sinatra
 	url = git://github.com/bmizerany/sinatra.git
+[submodule "test/public/jquery_route"]
+	path = test/public/jquery_route
+	url = git://github.com/collin/jquery_route.git

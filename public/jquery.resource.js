@@ -18,9 +18,12 @@
         return this.route(this.id);
       }
 
-      ,xhr_error: function(xhr, stat, err) { 
-        console.log(xhr, stat, err);
-        _('body').html(xhr.responseText);
+      ,xhr_error: function(xhr, stat, err) {
+        _('body').append(xhr.responseText);
+      }
+      
+      ,timeout_error: function() {
+        /* STUB */
       }
 
       ,on_get: function() {}
@@ -41,8 +44,7 @@
           ,type: 'get'
           ,complete: this.after_get.bind(this)
           ,success: this.load.bind(this)
-          /* SILLY */
-          ,timeout: this.xhr_error
+          ,timeout: this.timeout_error
           ,error: this.xhr_error
         });
       }
@@ -67,8 +69,7 @@
           }
           ,complete: this.after_post.bind(this)
           ,success: this.instantiate.bind(this, data)
-          /* SILLY */
-          ,timeout: this.xhr_error
+          ,timeout: this.timeout_error
           ,error: this.xhr_error
         })
       }
@@ -93,8 +94,7 @@
           }
           ,complete: this.after_put.bind(this)
           ,success: this.update.bind(this, data)
-          /* SILLY */ 
-          ,timeout: this.xhr_error
+          ,timeout: this.timeout_error
           ,error: this.xhr_error
         });
       }
@@ -118,8 +118,7 @@
           ,data: {_method:'DELETE'}
           ,complete: this.after_delete.bind(this)
           ,success: this.expunge.bind(this)
-          /* SILLY */
-          ,timeout: this.xhr_error
+          ,timeout: this.timeout_error
           ,error: this.xhr_error
         });
       }

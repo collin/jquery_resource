@@ -4,22 +4,43 @@ require 'sequel'
 require 'json'
 
 DB = Sequel.sqlite 'authors.squlite3'
-Author = DB[:authors]
+AuthorSet = DB[:authors]
+class Author < Sequel::Model; end
 
-def query params  
-  query_params = params.inject({}) do |obj, pair|
-    unless pair.first.nil?
-      obj[pair.first.intern] = pair.last
-    end
+def query  
+  params.inject({}) do |obj, pair|
+    obj[pair.first.intern] = pair.last unless pair.first.nil?
     obj
   end
-  query_params
+end
+
+def current_author
+  AuthorSet.where(:id => params[:id])
+end
+
+def author_params
+  JSON.parse params[:author]
 end
 
 get '/authors/' do
-  Author.all(query(params)).to_json
+  AuthorSet.all(query).to_json
 end
 
 get '/authors/:id' do
-  Author.where(:id => params[:id]).all.to_json
+  current_author.all.to_json
+end
+
+post '/authors/' do
+  author = Author.create author_params
+  author.id.to_s
+end
+
+put '/authors/:id' do
+  current_author.update author_params
+  'true'
+end
+
+delete '/authors/:id' do
+  current_author.delete
+  'true'
 end

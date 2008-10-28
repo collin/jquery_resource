@@ -6,9 +6,9 @@
     
     function query_string(options) {
       if(options == undefined) return "";
-      var q = "?", slot;
-      for(slot in options) q+= "&" + slot + '=' + options[slot];
-      return q;
+      var q = "?", slot, params = [];
+      for(slot in options) params.push(slot + '=' + options[slot]);
+      return q+params.join('&');
     }
     
     function path_with_options(fn) {
